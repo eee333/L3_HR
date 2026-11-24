@@ -29,7 +29,7 @@ vercel dev
 Перед завершением правок запускать:
 
 ```powershell
-.\.venv\Scripts\python.exe -m py_compile api/evaluate.py evaluator.py prompts.py
+.\.venv\Scripts\python.exe -m py_compile api/index.py evaluator.py prompts.py
 node --check script.js
 ```
 

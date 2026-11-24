@@ -45,7 +45,7 @@ jobs:
 
       - name: Validate source files
         run: |
-          python -m py_compile api/evaluate.py evaluator.py prompts.py
+          python -m py_compile api/index.py evaluator.py prompts.py
           node --check script.js
 
       - name: Pull Vercel project settings
