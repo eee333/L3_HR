@@ -31,6 +31,8 @@ vercel --prod
 
 В интерфейсе Vercel выберите репозиторий `eee333/L3_HR`, оставьте корневой каталог проекта и добавьте переменную `OPENAI_API_KEY` в разделе Environment Variables. Файл `.env` в репозиторий не добавляется.
 
+Файл `pyproject.toml` указывает Vercel entrypoint Python Function: `api.evaluate:handler`.
+
 ## GitHub Actions
 
 Workflow `.github/workflows/deploy-vercel.yml` автоматически выполняет production-деплой после каждого push в `main`. Его также можно запустить вручную через вкладку **Actions**.
