@@ -90,7 +90,7 @@ evaluateButton.addEventListener("click", async () => {
     statusElement.textContent = `Обработка ${index + 1} из ${resumeFiles.length}: ${file.name}`;
     try {
       const payload = { vacancy_text: vacancy, vacancy_file: vacancy ? null : await encodeFile(vacancyFile), resume: await encodeFile(file) };
-      const response = await fetch("/api/evaluate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const response = await fetch("/api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const body = await response.json();
       if (!response.ok || !body.ok) throw new Error(body.error || "Неизвестная ошибка API.");
       evaluated.push(body.data);

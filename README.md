@@ -31,7 +31,7 @@ vercel --prod
 
 В интерфейсе Vercel выберите репозиторий `eee333/L3_HR`, оставьте корневой каталог проекта и добавьте переменную `OPENAI_API_KEY` в разделе Environment Variables. Файл `.env` в репозиторий не добавляется.
 
-Файл `pyproject.toml` указывает Vercel entrypoint Python Function `api.evaluate:handler` и содержит зависимости Python Runtime.
+Файл `api/index.py` — стандартный Vercel entrypoint для API-маршрута `/api`, а `pyproject.toml` содержит зависимости Python Runtime.
 
 ## GitHub Actions
 
