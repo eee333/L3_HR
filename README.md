@@ -1,6 +1,6 @@
 # AI-рекрутер
 
-Локальное Streamlit-приложение для оценки одного описания вакансии и одного или нескольких резюме в TXT/PDF.
+Vercel-приложение для оценки одного описания вакансии и одного или нескольких резюме в TXT/PDF.
 
 ## Запуск
 
@@ -9,23 +9,39 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Заполните `.env`:
+Для локального API создайте `.env`:
 
 ```text
 OPENAI_API_KEY=your_api_key_here
 ```
 
-Запустите приложение:
+Запустите статический интерфейс и API через Vercel CLI:
 
 ```powershell
-.\.venv\Scripts\streamlit.exe run app.py
+npm install -g vercel
+vercel dev
 ```
 
-Если запускаете в среде с ограниченными правами на домашнюю папку, используйте команду из проекта:
+Откройте адрес, который покажет Vercel CLI. Для публикации задайте секрет в Vercel:
 
 ```powershell
-.\.venv\Scripts\streamlit.exe run app.py --browser.gatherUsageStats false
+vercel env add OPENAI_API_KEY production
+vercel --prod
 ```
+
+В интерфейсе Vercel выберите репозиторий `eee333/L3_HR`, оставьте корневой каталог проекта и добавьте переменную `OPENAI_API_KEY` в разделе Environment Variables. Файл `.env` в репозиторий не добавляется.
+
+## GitHub Actions
+
+Workflow `.github/workflows/deploy-vercel.yml` автоматически выполняет production-деплой после каждого push в `main`. Его также можно запустить вручную через вкладку **Actions**.
+
+В настройках GitHub-репозитория откройте **Settings → Secrets and variables → Actions** и добавьте Secrets:
+
+- `VERCEL_TOKEN` — токен доступа Vercel.
+- `VERCEL_ORG_ID` — идентификатор команды или аккаунта Vercel.
+- `VERCEL_PROJECT_ID` — идентификатор проекта Vercel.
+
+Значение `OPENAI_API_KEY` храните в Environment Variables проекта Vercel, а не в GitHub Actions и не в репозитории.
 
 ## Смоук-тест
 

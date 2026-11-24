@@ -1,4 +1,3 @@
-streamlit>=1.39
 pdfplumber>=0.11
 openai>=1.54
 pydantic>=2.8

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AI-рекрутер для оценки соответствия резюме вакансии" />
+    <title>AI-рекрутер</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">AI RECRUITER</p>
+          <h1>Оценка резюме по вакансии</h1>
+          <p class="subtitle">Загрузите вакансию и резюме — приложение сравнит требования, покажет доказательства и подготовит вопросы для интервью.</p>
+        </div>
+        <div class="hero-mark" aria-hidden="true">HR</div>
+      </header>
+
+      <section class="card form-card">
+        <div class="section-heading">
+          <div><span class="step">01</span><h2>Вакансия</h2></div>
+          <span class="hint">TXT или PDF</span>
+        </div>
+        <label class="upload-zone" for="vacancy-file">
+          <span class="upload-icon">↑</span>
+          <span><strong>Загрузить описание вакансии</strong><small>или вставьте текст ниже</small></span>
+          <input id="vacancy-file" type="file" accept=".txt,.pdf,application/pdf,text/plain" />
+        </label>
+        <div id="vacancy-file-name" class="file-name" hidden></div>
+        <label class="field-label" for="vacancy-text">Текст вакансии</label>
+        <textarea id="vacancy-text" rows="9" placeholder="Вставьте или отредактируйте описание вакансии"></textarea>
+      </section>
+
+      <section class="card form-card">
+        <div class="section-heading">
+          <div><span class="step">02</span><h2>Резюме кандидатов</h2></div>
+          <span class="hint">TXT или PDF</span>
+        </div>
+        <label class="upload-zone upload-zone-compact" for="resume-files">
+          <span class="upload-icon">＋</span>
+          <span><strong>Выбрать одно или несколько резюме</strong><small>Каждое резюме будет обработано отдельно</small></span>
+          <input id="resume-files" type="file" accept=".txt,.pdf,application/pdf,text/plain" multiple />
+        </label>
+        <div id="resume-list" class="file-list empty-state">Файлы ещё не выбраны</div>
+      </section>
+
+      <div class="actions">
+        <button id="evaluate-button" class="primary-button" type="button">Оценить резюме</button>
+        <span id="status" class="status" role="status"></span>
+      </div>
+      <div id="global-error" class="alert error" hidden></div>
+      <section id="results" class="results" hidden>
+        <div class="results-heading"><h2>Результаты</h2><span id="results-count"></span></div>
+        <div id="results-list"></div>
+      </section>
+    </main>
+    <script src="/script.js"></script>
+  </body>
+</html>
