@@ -1,3 +1,3 @@
-from api.evaluate import handler
+from api.evaluate import handler as _evaluate_handler
 
-__all__ = ["handler"]
+handler = _evaluate_handler
