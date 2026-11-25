@@ -38,7 +38,6 @@ def build_result_html(candidate: dict, *, generated_at: datetime | None = None) 
     ) or '<tr><td colspan="4">Нет данных</td></tr>'
     filename = _text(str(candidate.get("file_name", "резюме")))
     safe_filename = json.dumps(_safe_filename(str(candidate.get("file_name", "резюме"))), ensure_ascii=False)
-    tone = "good" if passed else "bad"
     return f"""<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Результат оценки — {filename}</title><style>
