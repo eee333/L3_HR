@@ -7,6 +7,7 @@ from http.server import BaseHTTPRequestHandler
 from typing import Any
 
 from evaluator import EvaluationError, compute_verdict, evaluate_resume, extract_text_from_upload
+from report import build_result_html, result_filename
 
 
 MAX_REQUEST_BYTES = 4_000_000
@@ -68,11 +69,14 @@ def _evaluate(payload: dict[str, Any]) -> dict[str, Any]:
     resume_data = payload.get("resume")
     resume = extract_text_from_upload(_decode_file(resume_data, "resume"))
     result = evaluate_resume(vacancy, resume)
-    return {
+    candidate = {
         "file_name": resume_data["name"],
         "result": result.model_dump(),
         "verdict": compute_verdict(result.score),
     }
+    candidate["report_html"] = build_result_html(candidate)
+    candidate["report_filename"] = result_filename(candidate)
+    return candidate
 
 
 class handler(BaseHTTPRequestHandler):

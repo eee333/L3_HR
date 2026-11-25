@@ -1,6 +1,7 @@
 name: Deploy to Vercel
 
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -45,20 +46,24 @@ jobs:
 
       - name: Validate source files
         run: |
-          python -m py_compile api/index.py evaluator.py prompts.py
+          python -m py_compile api/index.py evaluator.py prompts.py report.py
           node --check script.js
+          python -m unittest discover -s tests -v
 
       - name: Pull Vercel project settings
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Vercel artifacts
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: vercel build --prod --token="$VERCEL_TOKEN"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy production artifacts
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
