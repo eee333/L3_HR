@@ -10,13 +10,13 @@ def _text(value: object) -> str:
     return html.escape(str(value or ""), quote=True)
 
 
-def _list(items: list[str], empty: str = "Нет данных") -> str:
+def _listss(items: list[str], empty: str = "Нет данных") -> str:
     if not items:
         return f"<p>{_text(empty)}</p>"
     return "<ul>" + "".join(f"<li>{_text(item)}</li>" for item in items) + "</ul>"
 
 
-def _safe_filename(value: str) -> str:
+def _safe_filenamess(value: str) -> str:
     stem = re.sub(r"[^\w.-]+", "_", value, flags=re.UNICODE).strip("._") or "candidate"
     return f"результат_{stem[:80]}.html"
 
