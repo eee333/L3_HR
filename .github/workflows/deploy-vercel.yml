@@ -1,6 +1,7 @@
-name: Deploy to Vercel
+name: Test and deploy to Vercel
 
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -9,13 +10,9 @@ on:
 permissions:
   contents: read
 
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
 jobs:
-  deploy:
-    name: Production deployment
+  tests:
+    name: Tests and source checks
     runs-on: ubuntu-latest
 
     steps:
@@ -32,33 +29,54 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install Python dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Validate Python and JavaScript
+        run: |
+          python -m py_compile api/index.py evaluator.py prompts.py report.py
+          node --check script.js
+
+      - name: Test HTML report generation
+        run: python -m unittest discover -s tests -v
+
+  deploy-production:
+    name: Build and deploy production
+    needs: tests
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20
+
       - name: Install uv
         uses: astral-sh/setup-uv@v10.3.3
         with:
           version: latest
 
-      - name: Install deployment tools
+      - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Install Python dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements.txt
-
-      - name: Validate source files
-        run: |
-          python -m py_compile api/index.py evaluator.py prompts.py
-          node --check script.js
-
-      - name: Pull Vercel project settings
+      - name: Pull Vercel production settings
         run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
-      - name: Build Vercel artifacts
+      - name: Build Vercel production artifacts
         run: vercel build --prod --token="$VERCEL_TOKEN"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy production artifacts
+      - name: Deploy to Vercel Production
         run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

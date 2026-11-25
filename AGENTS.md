@@ -7,7 +7,8 @@ Vercel-приложение «AI-рекрутер» для оценки соот
 Основные файлы:
 
 - `index.html`, `styles.css`, `script.js` — статический русскоязычный интерфейс.
-- `api/evaluate.py` — Vercel Python Function для обработки одного резюме.
+- `api/index.py` — Vercel Python Function для обработки одного резюме.
+- `report.py` — генерация автономного HTML-отчёта.
 - `evaluator.py` — извлечение текста из TXT/PDF, вызов OpenAI API, pydantic-валидация, вычисление вердикта.
 - `prompts.py` — системный и пользовательский промты.
 - `requirements.txt` — зависимости.
@@ -29,8 +30,9 @@ vercel dev
 Перед завершением правок запускать:
 
 ```powershell
-.\.venv\Scripts\python.exe -m py_compile api/index.py evaluator.py prompts.py
+.\.venv\Scripts\python.exe -m py_compile api/index.py evaluator.py prompts.py report.py
 node --check script.js
+python -m unittest discover -s tests -v
 ```
 
 Быстрая проверка зависимостей:

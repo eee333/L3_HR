@@ -9,6 +9,7 @@ const globalError = document.querySelector("#global-error");
 const results = document.querySelector("#results");
 const resultsList = document.querySelector("#results-list");
 const resultsCount = document.querySelector("#results-count");
+let evaluatedResults = [];
 
 let vacancyFile = null;
 let resumeFiles = [];
@@ -37,10 +38,11 @@ function resultHtml(item) {
   const result = item.result;
   const good = item.verdict === "подходит";
   const evidence = (result.evidence || []).map((row) => `<tr><td>${escapeHtml(row.requirement)}</td><td><span class="status-pill ${statusClass(row.status)}">${escapeHtml(row.status)}</span></td><td>${escapeHtml(row.quote || "")}</td><td>${escapeHtml(row.reasoning)}</td></tr>`).join("");
+  const resultIndex = evaluatedResults.indexOf(item);
   return `<details class="result" open>
     <summary>${escapeHtml(item.file_name)}<span class="summary-meta ${good ? "good" : "bad"}">${escapeHtml(item.verdict)} · ${result.score}/100</span></summary>
     <div class="result-body">
-      <div class="score-row"><span class="score">${result.score}/100</span><span class="verdict ${good ? "good" : "bad"}">${escapeHtml(item.verdict)}</span><span class="threshold">Порог: 75</span></div>
+      <div class="score-row"><span class="score">${result.score}/100</span><span class="verdict ${good ? "good" : "bad"}">${escapeHtml(item.verdict)}</span><span class="threshold">Порог: 75</span><button class="save-button" type="button" data-result-index="${resultIndex}">Скачать HTML</button></div>
       <h3>Краткий вывод</h3><p>${escapeHtml(result.summary)}</p>
       <div class="columns"><div><h3>Сильные стороны</h3>${listHtml(result.strengths)}</div><div><h3>Пробелы</h3>${listHtml(result.gaps)}</div></div>
       <h3>Подтверждающие факты</h3>
@@ -85,6 +87,7 @@ evaluateButton.addEventListener("click", async () => {
 
   evaluateButton.disabled = true;
   const evaluated = [];
+  evaluatedResults = evaluated;
   for (let index = 0; index < resumeFiles.length; index += 1) {
     const file = resumeFiles[index];
     statusElement.textContent = `Обработка ${index + 1} из ${resumeFiles.length}: ${file.name}`;
@@ -103,4 +106,18 @@ evaluateButton.addEventListener("click", async () => {
   resultsCount.textContent = `${evaluated.length} ${evaluated.length === 1 ? "результат" : "результата"}`;
   statusElement.textContent = "Готово";
   evaluateButton.disabled = false;
+});
+
+resultsList.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-result-index]");
+  if (!button) return;
+  const item = evaluatedResults[Number(button.dataset.resultIndex)];
+  if (!item?.report_html) return;
+  const blob = new Blob([item.report_html], { type: "text/html;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = item.report_filename || "результат.html";
+  link.click();
+  URL.revokeObjectURL(url);
 });

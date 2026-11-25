@@ -46,6 +46,8 @@ button { font: inherit; }
 .primary-button { border: 0; border-radius: 11px; background: var(--blue); color: white; font-weight: 750; padding: 14px 22px; cursor: pointer; box-shadow: 0 6px 14px rgba(49,94,251,.22); }
 .primary-button:hover { background: var(--blue-dark); }
 .primary-button:disabled { opacity: .6; cursor: wait; }
+.save-button { margin-left: auto; border: 1px solid #cbd5e1; background: white; color: #26344b; border-radius: 9px; padding: 9px 12px; font-weight: 700; cursor: pointer; }
+.save-button:hover { border-color: var(--blue); color: var(--blue); }
 .status { color: var(--muted); font-size: .92rem; }
 .alert { border-radius: 11px; padding: 13px 15px; margin-bottom: 18px; }
 .error { background: #fff0f1; color: #9f2834; border: 1px solid #f3c5c9; }
