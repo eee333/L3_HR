@@ -10,13 +10,13 @@ def _text(value: object) -> str:
     return html.escape(str(value or ""), quote=True)
 
 
-def _listss(items: list[str], empty: str = "Нет данных") -> str:
+def _list(items: list[str], empty: str = "Нет данных") -> str:
     if not items:
         return f"<p>{_text(empty)}</p>"
     return "<ul>" + "".join(f"<li>{_text(item)}</li>" for item in items) + "</ul>"
 
 
-def _safe_filenamess(value: str) -> str:
+def _safe_filename(value: str) -> str:
     stem = re.sub(r"[^\w.-]+", "_", value, flags=re.UNICODE).strip("._") or "candidate"
     return f"результат_{stem[:80]}.html"
 
@@ -38,7 +38,6 @@ def build_result_html(candidate: dict, *, generated_at: datetime | None = None) 
     ) or '<tr><td colspan="4">Нет данных</td></tr>'
     filename = _text(str(candidate.get("file_name", "резюме")))
     safe_filename = json.dumps(_safe_filename(str(candidate.get("file_name", "резюме"))), ensure_ascii=False)
-    tone = "good" if passed else "bad"
     return f"""<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Результат оценки — {filename}</title><style>

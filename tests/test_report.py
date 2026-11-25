@@ -29,7 +29,7 @@ class BuildResultHtmlTests(unittest.TestCase):
 
         self.assertIn("<!doctype html>", output)
         self.assertIn('name="viewport"', output)
-        self.assertIn("вввв.txt", output)
+        self.assertIn("Анна Иванова.txt", output)
         self.assertIn("84/100", output)
         self.assertIn("&lt;по основным требованиям&gt;", output)
         self.assertNotIn("<img", output.lower())
